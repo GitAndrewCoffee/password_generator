@@ -1,33 +1,27 @@
-// Assignment code here
-
-
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
+  //Let users know they've started the process
   window.alert("Please answer a few questions to generate your password");
- 
-  // THEN I select which criteria to include in the password
+  
+  //Get user's desired length
   var pwLength = getLength ();
+  //Get user's desired character set
   var pwCharacters = getCharacters ();
+  
   console.log(pwLength);
   console.log(pwCharacters);
-// THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-// WHEN I answer each prompt
-// THEN my input should be validated and at least one character type should be selected
 
-  // var password = generatePassword();
-  // var passwordText = document.querySelector("#password");
-  // passwordText.value = password;
+  var password = generatePassword(pwLength, pwCharacters);
+  var passwordText = document.querySelector("#password");
+  passwordText.value = password;
 
 }
 
 function getLength() {
   
-  // WHEN prompted for the length of the password
-  // THEN I choose a length of at least 8 characters and no more than 128 characters
-
   var pwLength = window.prompt("Please enter a numercial value between 8 and 128 for how many characters you want in your password");
   pwLength = parseInt(pwLength); //making sure this is an INT so IF statements process correctly
 
@@ -142,6 +136,45 @@ function getCharacters () {
       
     }
   }
+}
+
+function generatePassword(pwLength, pwCharacters) {
+  
+  var returnMe = "";
+
+  window.alert("Generating Password");
+
+  // Defining the character sets
+  var lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+  var upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var numericChars = "012345678910";
+  var specialChars = "!@#$%";
+
+  var useMeChars = "";
+
+  //Building a character set based on the user selections
+  if  (pwCharacters.useLC === 1){
+    useMeChars = useMeChars + lowerCaseChars;
+  }
+  if  (pwCharacters.useUC === 1){
+    useMeChars = useMeChars + upperCaseChars;
+  }
+  if  (pwCharacters.useNums === 1){
+    useMeChars = useMeChars + numericChars;
+  }
+  if  (pwCharacters.useSpecial === 1){
+    useMeChars = useMeChars + specialChars;
+  }
+
+  console.log(useMeChars);
+
+  //Building the password based on user set length
+  for (let i = 0; i < pwLength; i++){
+    returnMe = returnMe + useMeChars[Math.floor(Math.random() * useMeChars.length)];//Referenced this guide: https://coderrocketfuel.com/article/generate-a-random-letter-from-the-alphabet-using-javascript
+  }
+
+  return returnMe;
+  
 }
 
 // Add event listener to generate button
