@@ -10,8 +10,9 @@ function writePassword() {
  
   // THEN I select which criteria to include in the password
   var pwLength = getLength ();
-
   var pwCharacters = getCharacters ();
+  console.log(pwLength);
+  console.log(pwCharacters);
 // THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
 // WHEN I answer each prompt
 // THEN my input should be validated and at least one character type should be selected
@@ -57,71 +58,78 @@ function getLength() {
 
 function getCharacters () {
 
-  var getOptionsLong = "This is where the user will choose characters";
-  var getOptionsArray = getOptionsLong.split(" ");//split options into an array
   var returnMe = {useLC:"0", useUC:"0", useNums:"0", useSpecial:"0"};
+
+  controlLoops();
+
+  return returnMe;
 
   // THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
   // WHEN I answer each prompt
   // THEN my input should be validated and at least one character type should be selected
 
-  function promptForChars() {
+  function controlLoops() {
+
     
+    var loopAnchor = 0;
+
+    do {
+      var optionsArray = promptChars();
+      var loopAnchor = validateChars();
+    } while (loopAnchor = 0);
+    
+    function promptChars(){
+
     window.alert("Choose which characters to use in generating your password");
     window.alert("Type at least one of the following, with multiple options seperated by spaces");
 
-    getOptionsLong = window.prompt("lowercase, uppercase, numeric, or special characters");
+    var getOptions = window.prompt("lowercase, uppercase, numeric, or special characters");
 
     //clean up the string for use in logic
-    getOptionsLong = getOptionsLong.toLowerCase(); //remove uppercase entries
-    getOptionsLong.replace(",",""); //remove any commas a user may have entered
-    getOptionsLong.replace("&",""); //remove any ampersands a user may have entered
-    getOptionsLong.replace("or",""); //remove any "ors" a user may have entered
-    getOptionsLong.replace("lower case","lowercase"); //remove space for validation step
-    getOptionsLong.replace("upper case","uppercase"); //remove space for validation step
-    getOptionsLong.replace("special characters","specialcharacters"); //remove space for validation step
+    getOptions = getOptions.toLowerCase(); //remove uppercase entries
+    getOptions.replace(",",""); //remove any commas a user may have entered
+    getOptions.replace("&",""); //remove any ampersands a user may have entered
+    getOptions.replace("or",""); //remove any "ors" a user may have entered
+    getOptions.replace("lower case","lowercase"); //remove space for validation step
+    getOptions.replace("upper case","uppercase"); //remove space for validation step
+    getOptions.replace("special characters","specialcharacters"); //remove space for validation step
 
     
-    getOptionsArray = getOptionsLong.split(" ");//split options into an array
-
-  }
-
-  function validateChars(){
-    for (let i = 0; i < getOptionsArray.length; i++){
-
-      if (getOptionsArray[i] === "lowercase"){
-
-        returnMe.useLC = 1; 
-
-      } else if (getOptionsArray[i] === "uppercase"){
-
-        returnMe.useUC = 1; 
-
-      } else if (getOptionsArray[i] === "numeric"){
-
-        returnMe.useNums = 1; 
-
-      } else if (getOptionsArray[i] === "specialcharacters"){
-
-        returnMe.useSpecial = 1; 
-
-      } else {
-
-        window.alert(getOptionsArray[i] + " is not a valid option.");
-        //reprompt the user
-
-      }
-
+    promptCharsReturn = getOptions.split(" ");//split options into an array
+    return promptCharsReturn;
 
     }
+
+    function validateChars(){
+      
+      for (let i = 0; i < optionsArray.length; i++){
+
+        if (optionsArray[i] === "lowercase"){
+
+          returnMe.useLC = 1; 
+          
+        } else if (optionsArray[i] === "uppercase"){
+
+          returnMe.useUC = 1; 
+
+        } else if (optionsArray[i] === "numeric"){
+
+          returnMe.useNums = 1; 
+
+        } else if (optionsArray[i] === "specialcharacters"){
+
+          returnMe.useSpecial = 1; 
+
+        } else {
+
+          window.alert(optionsArray[i] + " is not a valid option.");
+          return 0; //reset control loop
+
+        }
+      }
+      return 1; //break control loop
+    }
   }
-
-
-
-  promptForChars();
-  validateChars();
-  return characterOptions;
-
 }
 
 // Add event listener to generate button
