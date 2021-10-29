@@ -17,7 +17,6 @@ function writePassword() {
 // WHEN I answer each prompt
 // THEN my input should be validated and at least one character type should be selected
 
-
   // var password = generatePassword();
   // var passwordText = document.querySelector("#password");
   // passwordText.value = password;
@@ -59,7 +58,7 @@ function getLength() {
 
 function getCharacters () {
 
-  var returnMe = {useLC:"0", useUC:"0", useNums:"0", useSpecial:"0"};
+  var returnMe = {useLC:0, useUC:0, useNums:0, useSpecial:0};
 
   controlLoops();
 
@@ -77,35 +76,28 @@ function getCharacters () {
     do {
       var optionsArray = promptChars();
       var loopAnchor = validateChars();
-    } while (loopAnchor = 0);
+      console.log(loopAnchor);
+    } while (loopAnchor === 0);
     
     function promptChars(){
 
-    window.alert("Choose which characters to use in generating your password");
-    window.alert("Type at least one of the following, with multiple options seperated by spaces");
+      //Prompt the user for what characters they want
+      window.alert("Choose which characters to use in generating your password");
+      window.alert("Type at least one of the following, with multiple options seperated by spaces");
+      var getOptions = window.prompt("lowercase, uppercase, numeric, or special characters");
+      
+      //clean up the string for use in logic
+      getOptions = getOptions.toLowerCase(); //remove uppercase entries
+      getOptions = getOptions.replace(",",""); //remove any commas a user may have entered
+      getOptions = getOptions.replace("&",""); //remove any ampersands a user may have entered
+      getOptions = getOptions.replace("or",""); //remove any "ors" a user may have entered
+      getOptions = getOptions.replace("lower case","lowercase"); //remove space for validation step
+      getOptions = getOptions.replace("upper case","uppercase"); //remove space for validation step
+      getOptions = getOptions.replace("special characters","specialcharacters"); //remove space for validation step
+      
+      promptCharsReturn = getOptions.split(" ");//split options into an array
 
-    var getOptions = window.prompt("lowercase, uppercase, numeric, or special characters");
-    console.log(getOptions);
-
-    //clean up the string for use in logic
-    getOptions = getOptions.toLowerCase(); //remove uppercase entries
-    console.log(getOptions);
-    getOptions = getOptions.replace(",",""); //remove any commas a user may have entered
-    console.log(getOptions);
-    getOptions = getOptions.replace("&",""); //remove any ampersands a user may have entered
-    console.log(getOptions);
-    getOptions = getOptions.replace("or",""); //remove any "ors" a user may have entered
-    console.log(getOptions);
-    getOptions = getOptions.replace("lower case","lowercase"); //remove space for validation step
-    console.log(getOptions);
-    getOptions = getOptions.replace("upper case","uppercase"); //remove space for validation step
-    console.log(getOptions);
-    getOptions = getOptions.replace("special characters","specialcharacters"); //remove space for validation step
-    console.log(getOptions);
-
-    
-    promptCharsReturn = getOptions.split(" ");//split options into an array
-    return promptCharsReturn;
+      return promptCharsReturn; //complete function, returning the cleaned array
 
     }
 
@@ -132,11 +124,22 @@ function getCharacters () {
         } else {
 
           window.alert(optionsArray[i] + " is not a valid option.");
-          return 0; //reset control loop
+          
 
         }
       }
-      return 1; //break control loop
+    
+      //check to make sure atleast 1 option was selected and return a value to continue or break the prompt cycle
+      var returnMeCheck = returnMe.useLC + returnMe.useUC + returnMe.useNums + returnMe.useSpecial;
+      console.log(returnMeCheck);
+      console.log(returnMe);
+
+      if (returnMeCheck > 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+      
     }
   }
 }
