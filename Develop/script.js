@@ -30,6 +30,7 @@ function getLength() {
   // THEN I choose a length of at least 8 characters and no more than 128 characters
 
   var pwLength = window.prompt("Please enter a numercial value between 8 and 128 for how many characters you want in your password");
+  pwLength = parseInt(pwLength); //making sure this is an INT so IF statements process correctly
 
   var loopAnchor = 1;
 
@@ -84,15 +85,23 @@ function getCharacters () {
     window.alert("Type at least one of the following, with multiple options seperated by spaces");
 
     var getOptions = window.prompt("lowercase, uppercase, numeric, or special characters");
+    console.log(getOptions);
 
     //clean up the string for use in logic
     getOptions = getOptions.toLowerCase(); //remove uppercase entries
-    getOptions.replace(",",""); //remove any commas a user may have entered
-    getOptions.replace("&",""); //remove any ampersands a user may have entered
-    getOptions.replace("or",""); //remove any "ors" a user may have entered
-    getOptions.replace("lower case","lowercase"); //remove space for validation step
-    getOptions.replace("upper case","uppercase"); //remove space for validation step
-    getOptions.replace("special characters","specialcharacters"); //remove space for validation step
+    console.log(getOptions);
+    getOptions = getOptions.replace(",",""); //remove any commas a user may have entered
+    console.log(getOptions);
+    getOptions = getOptions.replace("&",""); //remove any ampersands a user may have entered
+    console.log(getOptions);
+    getOptions = getOptions.replace("or",""); //remove any "ors" a user may have entered
+    console.log(getOptions);
+    getOptions = getOptions.replace("lower case","lowercase"); //remove space for validation step
+    console.log(getOptions);
+    getOptions = getOptions.replace("upper case","uppercase"); //remove space for validation step
+    console.log(getOptions);
+    getOptions = getOptions.replace("special characters","specialcharacters"); //remove space for validation step
+    console.log(getOptions);
 
     
     promptCharsReturn = getOptions.split(" ");//split options into an array
