@@ -10,12 +10,14 @@ function writePassword() {
   var pwLength = getLength ();
   //Get user's desired character set
   var pwCharacters = getCharacters ();
-  
-  console.log(pwLength);
-  console.log(pwCharacters);
 
+  //Generate Password
   var password = generatePassword(pwLength, pwCharacters);
+
+  //Get password element in HTML
   var passwordText = document.querySelector("#password");
+
+  //Update the html element with the generate password
   passwordText.value = password;
 
 }
@@ -52,15 +54,11 @@ function getLength() {
 
 function getCharacters () {
 
-  var returnMe = {useLC:0, useUC:0, useNums:0, useSpecial:0};
+  var buildMe = {useLC:0, useUC:0, useNums:0, useSpecial:0};
 
   controlLoops();
 
-  return returnMe;
-
-  // THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-  // WHEN I answer each prompt
-  // THEN my input should be validated and at least one character type should be selected
+  return buildMe;
 
   function controlLoops() {
 
@@ -70,8 +68,7 @@ function getCharacters () {
     do {
       var optionsArray = promptChars();
       var loopAnchor = validateChars();
-      console.log(loopAnchor);
-    } while (loopAnchor === 0);
+      } while (loopAnchor === 0);
     
     function promptChars(){
 
@@ -88,6 +85,7 @@ function getCharacters () {
       getOptions = getOptions.replace("lower case","lowercase"); //remove space for validation step
       getOptions = getOptions.replace("upper case","uppercase"); //remove space for validation step
       getOptions = getOptions.replace("special characters","specialcharacters"); //remove space for validation step
+      getOptions = getOptions.replace("  "," "); //remove any double spaces a user may have entered
       
       promptCharsReturn = getOptions.split(" ");//split options into an array
 
@@ -101,19 +99,19 @@ function getCharacters () {
 
         if (optionsArray[i] === "lowercase"){
 
-          returnMe.useLC = 1; 
+          buildMe.useLC = 1; 
           
         } else if (optionsArray[i] === "uppercase"){
 
-          returnMe.useUC = 1; 
+          buildMe.useUC = 1; 
 
         } else if (optionsArray[i] === "numeric"){
 
-          returnMe.useNums = 1; 
+          buildMe.useNums = 1; 
 
         } else if (optionsArray[i] === "specialcharacters"){
 
-          returnMe.useSpecial = 1; 
+          buildMe.useSpecial = 1; 
 
         } else {
 
@@ -124,11 +122,9 @@ function getCharacters () {
       }
     
       //check to make sure atleast 1 option was selected and return a value to continue or break the prompt cycle
-      var returnMeCheck = returnMe.useLC + returnMe.useUC + returnMe.useNums + returnMe.useSpecial;
-      console.log(returnMeCheck);
-      console.log(returnMe);
+      var buildMeCheck = buildMe.useLC + buildMe.useUC + buildMe.useNums + buildMe.useSpecial;
 
-      if (returnMeCheck > 0) {
+      if (buildMeCheck > 0) {
         return 1;
       } else {
         return 0;
@@ -139,38 +135,72 @@ function getCharacters () {
 }
 
 function generatePassword(pwLength, pwCharacters) {
+  //Referenced this guide: https://coderrocketfuel.com/article/generate-a-random-letter-from-the-alphabet-using-javascript
   
-  var returnMe = "";
+  var returnMe = ""; //the value that gets returned
+  var buildMe = ""; //the password as it gets built
 
   window.alert("Generating Password");
 
   // Defining the character sets
-  var lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
-  var upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var numericChars = "012345678910";
-  var specialChars = "!@#$%";
+  var lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";  //type 1 for mask building
+  var upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";  //type 2 for mask building
+  var numericChars = "012345678910";  //type 3 for mask building
+  var specialChars = "!@#$%";  //type 4 for mask building
 
   var useMeChars = "";
 
-  //Building a character set based on the user selections
+  //Building a character set based on the user selections and adding minimum 1 char per type
   if  (pwCharacters.useLC === 1){
     useMeChars = useMeChars + lowerCaseChars;
+    buildMe = buildMe + lowerCaseChars[Math.floor(Math.random() * lowerCaseChars.length)];
   }
   if  (pwCharacters.useUC === 1){
     useMeChars = useMeChars + upperCaseChars;
+    buildMe = buildMe + upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)];
   }
   if  (pwCharacters.useNums === 1){
     useMeChars = useMeChars + numericChars;
+    buildMe = buildMe + numericChars[Math.floor(Math.random() * numericChars.length)];
   }
   if  (pwCharacters.useSpecial === 1){
     useMeChars = useMeChars + specialChars;
+    buildMe = buildMe + specialChars[Math.floor(Math.random() * specialChars.length)];
   }
 
-  console.log(useMeChars);
+  console.log(buildMe + " min 1 characters");
 
-  //Building the password based on user set length
-  for (let i = 0; i < pwLength; i++){
-    returnMe = returnMe + useMeChars[Math.floor(Math.random() * useMeChars.length)];//Referenced this guide: https://coderrocketfuel.com/article/generate-a-random-letter-from-the-alphabet-using-javascript
+  //Building the remainder of password based on user set length
+
+  var loopLength = pwLength - buildMe.length;
+
+  for (let i = 0; i < loopLength; i++){
+    buildMe = buildMe + useMeChars[Math.floor(Math.random() * useMeChars.length)];
+  }
+
+  //Randomize Password so that minimum characters do not occur at the start of the password
+  //Referenced https://www.codegrepper.com/code-examples/javascript/randomize+character+order+js
+  // & https://stackoverflow.com/questions/11116501/remove-a-character-at-a-certain-position-in-a-string-javascript
+  // & https://www.w3docs.com/snippets/javascript/how-to-remove-an-element-from-an-array-in-javascript.html
+
+  //Generate a random order
+
+  console.log(buildMe  + " unrandomized character list");
+
+  loopLength = buildMe.length;
+  reorderMe = buildMe.split("");
+  
+  console.log(loopLength + " loop length");
+  
+
+  for (let i = 0; i < loopLength; i++){
+
+    arrayLocation = Math.floor(Math.random() * reorderMe.length);
+
+    returnMe = returnMe + reorderMe[arrayLocation];
+
+    reorderMe.splice(arrayLocation, 1);      
+    
   }
 
   return returnMe;
