@@ -29,7 +29,7 @@ WHEN the password is generated
 THEN the password is either displayed in an alert or written to the page
 
 ## Example Site Rendering
-![Getting Started](./assets/images/readme-screen-shot.JPG)
+![Getting Started](./assets/images/readme-screen-shot.jpg)
 
 
 ## Built With
@@ -38,7 +38,7 @@ THEN the password is either displayed in an alert or written to the page
 * JavaScript
 
 ## Website
-
+https://gitandrewcoffee.github.io/password_generator/
 
 
 ## Contribution
